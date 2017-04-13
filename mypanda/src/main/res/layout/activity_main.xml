@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.mypanda.MainActivity">
+
+    <include layout="@layout/toplayout" />
+
+    <FrameLayout
+        android:id="@+id/framelayout_themain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/top"
+        android:layout_above="@+id/include"/>
+
+    <include layout="@layout/buttom_button_all"
+        android:id="@+id/include"
+        />
+
+</RelativeLayout>
