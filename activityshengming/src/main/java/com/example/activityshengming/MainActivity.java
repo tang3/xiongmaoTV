@@ -1,65 +1,49 @@
 package com.example.activityshengming;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Window;
-import android.view.WindowManager;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
+
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends Activity {
+
+    private RecyclerView bottom;
+    private RecyclerView top;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // 隐藏标题栏
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        // 隐藏状态栏
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_main);
-        Log.e(TAG, "onCreate: " );
+        initData();
+        GridLayoutManager topManger =new GridLayoutManager(this,3);
+        GridLayoutManager bottomManager =new GridLayoutManager(this,3);
+
+        bottom = (RecyclerView) findViewById(R.id.bottom);
+        top = (RecyclerView) findViewById(R.id.top);
+        bottom.setLayoutManager(bottomManager);
+        top.setLayoutManager(topManger);
+        top.setAdapter(new MyAdapter(this,strings));
+
+
+
     }
+
 
     private static final String TAG = "MainActivity";
+    List<String> strings =new ArrayList<>();
+    private void initData() {
+        for (int i = 0; i < 90; i++) {
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.e(TAG, "onStart: ");
-
+        strings.add("item"+i);
+        }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.e(TAG, "onResume: " );
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.e(TAG, "onPause: ");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.e(TAG, "onStop: " );
-
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.e(TAG, "onRestart: " );
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.e(TAG, "onDestroy: " );
-    }
 
 }
