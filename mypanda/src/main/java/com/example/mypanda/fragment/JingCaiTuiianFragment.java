@@ -1,6 +1,7 @@
 package com.example.mypanda.fragment;
 
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.example.mypanda.PlayerActivity;
 import com.example.mypanda.R;
+import com.example.mypanda.Utils.DPPXUtile;
 import com.example.mypanda.Utils.GetData;
 import com.example.mypanda.adapter.SimpRecyclerAdapter;
 import com.example.mypanda.entieny.TypeEntity;
@@ -68,8 +70,8 @@ public class JingCaiTuiianFragment extends BaseAllEntityFrgment implements Swipe
 //            }
             typeEntity = gson.fromJson(s, TypeEntity.class);
             simpRecyclerAdapter = new SimpRecyclerAdapter(context, typeEntity, manager);
-
-            recyclerView.setAdapter(new SimpRecyclerAdapter(context, typeEntity, manager));
+            recyclerView.addItemDecoration(new itemPadding());
+            recyclerView.setAdapter(simpRecyclerAdapter);
 
             return true;
         }
@@ -85,15 +87,45 @@ public class JingCaiTuiianFragment extends BaseAllEntityFrgment implements Swipe
 
     @Override
     public void onRefresh() {
-        if (!isRefresh) {
-            pagenumb++;
-            swip.setRefreshing(true);
-            url="http://m.api.xingyan.panda.tv/room/index?__version=2.1.9.1736&__plat=android&__channel=guanwang";
-//            url =first+pagenumb+end;
-                    GetData.GetData(url, context, handler);
-            swip.setRefreshing(false);
+//        if (!isRefresh) {
+//            pagenumb++;
+//            swip.setRefreshing(true);
+//            url="http://m.api.xingyan.panda.tv/room/index?__version=2.1.9.1736&__plat=android&__channel=guanwang";
+////            url =first+pagenumb+end;
+//                    GetData.GetData(url, context, handler);
+//            swip.setRefreshing(false);
+//        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                swip.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        swip.setRefreshing(false);
+                    }
+                });
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        });
+    }
+    public  class itemPadding extends RecyclerView.ItemDecoration{
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            int i = DPPXUtile.Dp2Px(context, 2);
+            int l = DPPXUtile.Dp2Px(context, 5);
+            outRect.top=l;
+            outRect.bottom=l;
+            outRect.left=i;
+            outRect.right=i;
+
+
         }
     }
-
 
 }

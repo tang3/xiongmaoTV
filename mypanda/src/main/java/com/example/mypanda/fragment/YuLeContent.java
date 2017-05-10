@@ -1,5 +1,6 @@
 package com.example.mypanda.fragment;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.mypanda.R;
+import com.example.mypanda.Utils.DPPXUtile;
 import com.example.mypanda.Utils.GetData;
 import com.example.mypanda.adapter.MyEntityAdapter;
 import com.example.mypanda.adapter.MyYuLeAdapter;
@@ -52,6 +54,7 @@ public class YuLeContent extends BaseAllEntityFrgment {
         swip = (SwipeRefreshLayout) root.findViewById(R.id.swip);
         GridLayoutManager manager = new GridLayoutManager(context, 2);
         recyclerView.setLayoutManager(manager);
+        recyclerView.addItemDecoration(new itemPadding());
 
 
     }
@@ -96,8 +99,9 @@ public class YuLeContent extends BaseAllEntityFrgment {
                                     YuleEntity.DataBean data = yuleEntity.getData();
                                     List<YuleEntity.DataBean.ItemsBean> items = data.getItems();
                                     Log.e("recyclerView", "run: ");
-                                    if (anInt==1)
-                                    recyclerView.setAdapter(new MyYuLeAdapter(items, context));
+                                    if (anInt==1) {
+                                        recyclerView.setAdapter(new MyYuLeAdapter(items, context));
+                                    }
                                     else{
                                         recyclerView.getAdapter().notifyDataSetChanged();
                                     }
@@ -115,5 +119,18 @@ public class YuLeContent extends BaseAllEntityFrgment {
                 return null;
             }
         });
+    }
+    public  class itemPadding extends RecyclerView.ItemDecoration{
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            int i = DPPXUtile.Dp2Px(context, 2);
+            int i1 = DPPXUtile.Dp2Px(context, 5);
+            outRect.top=i1;
+            outRect.bottom=i1;
+            outRect.left=i;
+            outRect.right=i;
+
+
+        }
     }
 }

@@ -17,7 +17,8 @@ public class WoDeFragment extends BaseNavigationFragment {
 
     @Override
     public View initView(LayoutInflater inflater, ViewGroup container) {
-        view = inflater.inflate(R.layout.fragment_wode, container, false);
+
+        view = inflater.inflate(R.layout.main_tab_settings, container, false);
         initAllView(view);
         intData();
         return view;

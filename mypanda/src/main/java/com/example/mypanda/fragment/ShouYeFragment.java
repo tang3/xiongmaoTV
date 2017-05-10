@@ -148,8 +148,20 @@ public class ShouYeFragment extends BaseNavigationFragment {
 
     private void initViewPager() {
         manager = getFragmentManager();
-        adapter = new MyViewPagerAdapter(manager, strings,cName);
+        adapter = new MyViewPagerAdapter(getContext(),manager, strings,cName);
         viewPager.setAdapter(adapter);
+        for (String s : cName) {
+            TabLayout.Tab tab = tabLayout.newTab();
+            View view = View.inflate(context, R.layout.tabview, null);
+            ImageView tabimage = (ImageView) view.findViewById(R.id.tabimage);
+            TextView tabtext = (TextView) view.findViewById(R.id.tabtext);
+            tabimage.setImageResource(R.mipmap.ic_launcher);
+            tabtext.setText(s);
+            tab.setCustomView(view);
+
+            tabLayout.addTab(tab);
+        }
+
     }
 
     private void initTablayout(List<AllTitle.DataBean> list) {
@@ -159,7 +171,7 @@ public class ShouYeFragment extends BaseNavigationFragment {
     List<Fragment> strings = new ArrayList<>();
 
     private void initTabData(List<AllTitle.DataBean> list) {
-        tabLayout.removeAllTabs();
+
         strings.clear();
         for (int i = -1; i < list.size(); i++) {
             View view = View.inflate(context, R.layout.tablayout_item, null);
@@ -195,7 +207,7 @@ public class ShouYeFragment extends BaseNavigationFragment {
             adapter.notifyDataSetChanged();
         }
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setupWithViewPager(viewPager);
+
         viewPager.removeOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

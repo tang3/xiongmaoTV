@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.mypanda.PlayerActivity;
 import com.example.mypanda.R;
+import com.example.mypanda.Utils.DPPXUtile;
 import com.example.mypanda.Utils.GetData;
 import com.example.mypanda.adapter.MyEntityAdapter;
 import com.example.mypanda.adapter.MySupViewPagerAdapter;
@@ -64,23 +65,23 @@ public class AllEntityFragment extends BaseAllEntityFrgment implements SuperRecy
     private String room_key;
 
     @Override
-    public void onItemClick(RecyclerView recyclerView, View view, int position) {
+    public void onItemClick(RecyclerView recyclerView, View view, int position,int headCount) {
 
-        String root_id = allEntityList.get(position).getId();
-//        &&!isLod
+        String root_id = allEntityList.get(position-headCount).getId();
+
         room_key = "";
-        room_key = allEntityList.get(position).getRoom_key();
+        room_key = allEntityList.get(position-headCount).getRoom_key();
         if (room_key == "") {
 
 //            http://api.m.panda.tv/ajax_get_liveroom_baseinfo?roomid=820866
             GetData.GetRootKey(root_id, context);
 
         } else {
-
-            Intent intent = new Intent(context, PlayerActivity.class);
-            Log.e(TAG, "onItemClick: " + room_key);
-            intent.putExtra("key", room_key);
-            startActivity(intent);
+            GetData.GetRootKey(root_id, context);
+//            Intent intent = new Intent(context, PlayerActivity.class);
+//
+//            intent.putExtra("key", room_key);
+//            startActivity(intent);
         }
 
     }
@@ -103,9 +104,7 @@ public class AllEntityFragment extends BaseAllEntityFrgment implements SuperRecy
 
 
     public class SpaceItemDecoration extends RecyclerView.ItemDecoration{
-
         private int space;
-
         public SpaceItemDecoration(int space) {
             this.space = space;
         }
@@ -114,9 +113,10 @@ public class AllEntityFragment extends BaseAllEntityFrgment implements SuperRecy
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
 
             if(parent.getChildPosition(view) != 0) {
-                outRect.top = 5;
-                outRect.left=space;
-                outRect.right=space;
+                int i = DPPXUtile.Dp2Px(context, 2);
+                outRect.top = i;
+                outRect.left=i;
+                outRect.right=i;
             }
         }
     }
@@ -125,7 +125,7 @@ public class AllEntityFragment extends BaseAllEntityFrgment implements SuperRecy
 
         if (listener != null) {
             ename = listener.onItemClickListener(ename);
-            Log.e(TAG, "initView:-----------------> " + ename);
+
         }
         string = "http://api.m.panda.tv/ajax_get_live_list_by_cate?cate=";
         string1 = "&pageno=";
@@ -169,7 +169,7 @@ public class AllEntityFragment extends BaseAllEntityFrgment implements SuperRecy
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.e(TAG, "onFailure: " + e.getMessage());
+
             }
 
             @Override
@@ -225,7 +225,7 @@ public class AllEntityFragment extends BaseAllEntityFrgment implements SuperRecy
                 adapter = new MyEntityAdapter(allEntityList, context, banners);
                 recyclerView.setAdapter(adapter);
             } else if (msg.what == 101) {
-                Log.e(TAG, "handleMessage: "+recyclerView.getAdapter().getItemCount() );
+
                 recyclerView.getAdapter().notifyDataSetChanged();
                 swip.setRefreshing(false);
             } else if (msg.what == 102) {
@@ -236,7 +236,7 @@ public class AllEntityFragment extends BaseAllEntityFrgment implements SuperRecy
             return true;
         }
     });
-    private static final String TAG = "TGA";
+    private static final String TAG = "AllEntityFragment";
 
 
 }

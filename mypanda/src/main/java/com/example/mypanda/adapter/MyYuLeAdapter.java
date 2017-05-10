@@ -2,6 +2,7 @@ package com.example.mypanda.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.mypanda.R;
+import com.example.mypanda.Utils.GetData;
 import com.example.mypanda.entieny.AllEntity;
 import com.example.mypanda.entieny.YuleEntity;
 
@@ -33,12 +35,32 @@ public class MyYuLeAdapter extends RecyclerView.Adapter<MyYuLeAdapter.MyViewHold
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
         holder.topTitle.setText(items.get(position).getName());
         holder.bottomTitle.setText(items.get(position).getUserinfo().getNickName());
         Glide.with(context).load(items.get(position).getPictures().getImg()).into(holder.imageView);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String room_key = items.get(position).getRoom_key();
+                String id = items.get(position).getId();
+                if (room_key == "") {
+                    Log.e(TAG, "onClick: "+id );
+                    Log.e(TAG, "o-----------nItemClick: "+room_key );
+                    GetData.GetRootKey(id, context);
+                } else {
+                    Log.e(TAG, "onClick: "+id );
+                    Log.e(TAG, "o-----------nItemClick: "+room_key );
+                    GetData.GetRootKey(id, context);
+
+                }
+            }
+        });
+
+
     }
 
+    private static final String TAG = "MyYuLeAdapter";
     @Override
     public int getItemCount() {
         return items.size();
@@ -48,6 +70,11 @@ public class MyYuLeAdapter extends RecyclerView.Adapter<MyYuLeAdapter.MyViewHold
         TextView topTitle;
         TextView bottomTitle;
         ImageView imageView;
+
+
+
+
+
 
         public MyViewHolder(View itemView) {
             super(itemView);

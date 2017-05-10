@@ -14,8 +14,9 @@
                 <android.support.design.widget.TabLayout
                     android:id="@+id/tablelayoutshouye"
                     android:layout_width="0dp"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    style="@style/MyTabLayout"
                     app:tabMode="scrollable"></android.support.design.widget.TabLayout>
 
                 <ImageView

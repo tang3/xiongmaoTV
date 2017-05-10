@@ -126,7 +126,7 @@ public class SuperRecyclerView extends RecyclerView {
                 position = containingViewHolder.getAdapterPosition();
             }
             if (position != -1)
-                onItemClickListenr.onItemClick(SuperRecyclerView.this, childViewUnder, position);
+                onItemClickListenr.onItemClick(SuperRecyclerView.this, childViewUnder, position, getHeadCount());
         }
 
     }
@@ -149,7 +149,7 @@ public class SuperRecyclerView extends RecyclerView {
     }
 
     public interface OnItemClickListenr {
-        void onItemClick(RecyclerView recyclerView, View view, int position);
+        void onItemClick(RecyclerView recyclerView, View view, int position,int headCount);
     }
 
     public void setOnItemClickListener(OnItemClickListenr onItemClickListener) {

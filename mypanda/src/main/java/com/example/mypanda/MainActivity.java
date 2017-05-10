@@ -37,16 +37,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         fragtag = tag;
     }
 
-    @Override
-    public void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        Log.e(TAG, "onAttachedToWindow: ------vvv ---------------");
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

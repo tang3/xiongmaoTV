@@ -1,19 +1,23 @@
 package com.example.mypanda.fragment;
 
+import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.UiThread;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mypanda.R;
+import com.example.mypanda.Utils.DPPXUtile;
 import com.example.mypanda.Utils.GetData;
 import com.example.mypanda.adapter.MyViewPagerAdapter;
 import com.example.mypanda.entieny.YuLeTitle;
@@ -68,26 +72,32 @@ public class YuLeFragment extends BaseNavigationFragment {
                             @Override
                             public void run() {
                                 //更新UI
+
                                 for (YuLeTitle.DataBean dataBean : yuLeTitle.getData()) {
+                                    if (dataBean.getEname().equals("yzdr")||dataBean.getEname().equals("xingyan"))
+                                    continue;
                                     cName.add(dataBean.getCname());
                                     eName.add(dataBean.getEname());
                                     Log.e("TAGGG", "run: "+dataBean.getEname() );
-                                    TabLayout.Tab tab = tabLayout.newTab();
-                                    TextView textView = new TextView(context);
-                                    textView.setText("标题");
-                                    tab.setCustomView(textView);
-                                    tabLayout.addTab(tab);
                                     YuLeContent yuLeContent = new YuLeContent();
                                     yuLeContent.eName=dataBean.getEname();
                                     fragments.add(yuLeContent);
-//                                    TabLayout.Tab tab = tabLayout.newTab();
-//                                    tab.setCustomView(textView);
-//                                    tabLayout.setSelected(true);
-//                                    tabLayout.addTab(tab);
+
 
                                 }
+                                for (String s : cName) {
+                                    TabLayout.Tab tab = tabLayout.newTab();
+                                    View view = View.inflate(context, R.layout.tabview, null);
+                                    ImageView tabimage = (ImageView) view.findViewById(R.id.tabimage);
+                                    TextView tabtext = (TextView) view.findViewById(R.id.tabtext);
+                                    tabimage.setImageResource(R.mipmap.ic_launcher);
+                                    tabtext.setText(s);
+                                    tab.setCustomView(view);
 
-                                    viewPager.setAdapter(new MyViewPagerAdapter(getFragmentManager(),fragments,cName));
+                                    tabLayout.addTab(tab);
+                                }
+
+                                    viewPager.setAdapter(new MyViewPagerAdapter(getContext(),getFragmentManager(),fragments,cName));
 
 
                             }
@@ -113,9 +123,13 @@ public class YuLeFragment extends BaseNavigationFragment {
         tabLayout = (TabLayout) view.findViewById(R.id.yule_tablayout);
         viewPager = (ViewPager) view.findViewById(R.id.yuleviewpager);
         Log.e(TAG, "initAllView: " );
-        tabLayout.setupWithViewPager(viewPager);
+
+
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-//        tabLayout.setupWithViewPager(viewPager);
+
+
+
+
         viewPager.removeOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

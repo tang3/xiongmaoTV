@@ -6,8 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
-import android.text.Layout;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -15,22 +14,18 @@ import android.view.SurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
-
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
-
 import java.io.IOException;
-
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
-
 /**
  * Created by 红超 on 2017/2/19.
  */
 
-public class PlayerActivity extends BaseActivity {
+public class PlayerActivity extends AppCompatActivity {
     private SurfaceView surfaceView;
     private IjkMediaPlayer mediaPlayer;
     private static final String TAG = "PlayerActivity";
@@ -60,7 +55,6 @@ public class PlayerActivity extends BaseActivity {
         String sign = intent.getStringExtra("sign");
         String ts = intent.getStringExtra("ts");
         String key = getIntent().getStringExtra("key");
-        Log.e(TAG, "onCreate:key " + key);
         String pl = getIntent().getStringExtra("pl");
 
         if (pl==null){
@@ -76,20 +70,19 @@ public class PlayerActivity extends BaseActivity {
         //http://221.204.220.134/pl8.live.panda.tv/live_panda/d484e9848e75e85be0859ba29f0c6850.flv?sign=de37b5f254cb090ae24066610eb94ce9&ts=58b83426&rid=-99277426
         String url ="http://pl"+pl+".live.panda.tv/live_panda/" + key + ".flv?sign="+sign+"&ts="+ts;
 
-        Log.e(TAG, "onCreate: "+url );
         metrics = new DisplayMetrics();
         try {
             mediaPlayer.setDataSource(url);
+
         } catch (IOException e) {
             e.printStackTrace();
             // 释放资源了
         }
         // 异步准备
-        mediaPlayer.prepareAsync();
         surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
-                Log.e(TAG, "surfaceCreated: 创建");
+                Log.e(TAG, "surfaceCreated: " );
                 pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
                 PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "My TAG");
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, 800);
@@ -102,20 +95,23 @@ public class PlayerActivity extends BaseActivity {
             @Override
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
                 Log.e(TAG, "surfaceChanged: ");
+
+
             }
 
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
                 Log.e(TAG, "surfaceDestroyed: ");
+
             }
         });
         mediaPlayer.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(IMediaPlayer iMediaPlayer) {
-                Log.e(TAG, "onPrepared: ");
                 mediaPlayer.setDisplay(surfaceView.getHolder());
                 mediaPlayer.start();
             }
+
         });
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -125,11 +121,9 @@ public class PlayerActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mediaPlayer != null) {
-            // 手动释放
-            mediaPlayer.stop();
+        Log.e(TAG, "onDestroy: " );
+        if (mediaPlayer!=null){
             mediaPlayer.release();
-            // c=null
             mediaPlayer = null;
         }
     }
@@ -140,9 +134,23 @@ public class PlayerActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e(TAG, "onResume: " );
+        mediaPlayer.prepareAsync();
+        if (!mediaPlayer.isPlaying())
+        mediaPlayer.start();
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
+        Log.e(TAG, "onPause: " );
+        if (mediaPlayer != null&&mediaPlayer.isPlaying()) {
+            // 手动释放
+            mediaPlayer.stop();
 
+        }
     }
 
     /**

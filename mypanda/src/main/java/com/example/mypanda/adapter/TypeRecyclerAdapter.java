@@ -1,7 +1,11 @@
 package com.example.mypanda.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Rect;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -9,8 +13,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.mypanda.PlayerActivity;
 import com.example.mypanda.R;
+import com.example.mypanda.Utils.DPPXUtile;
+import com.example.mypanda.Utils.GetData;
 import com.example.mypanda.entieny.TypeEntity;
+import com.example.mypanda.service.MyitemClickListener;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.util.List;
@@ -35,12 +43,36 @@ public class TypeRecyclerAdapter extends RecyclerView.Adapter<TypeRecyclerAdapte
     }
 
     @Override
-    public void onBindViewHolder(MyViewHoler holder, int position) {
+    public void onBindViewHolder(MyViewHoler holder, final int position) {
 
         itemsBean = data.get(position);
         Glide.with(context).load(itemsBean.getPictures().getImg()).error(R.mipmap.ic_launcher).into(holder.imageView);
         holder.topTitle.setText(itemsBean.getUserinfo().getNickName());
         holder.bottomTitle.setText(itemsBean.getName());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String room_key = data.get(position).getRoom_key();
+                String id = data.get(position).getId();
+                if (room_key == "") {
+                    Log.e(TAG, "onClick: "+id );
+                    Log.e(TAG, "o-----------nItemClick: "+room_key );
+                    GetData.GetRootKey(id, context);
+                } else {
+                    Log.e(TAG, "onClick: "+id );
+                    Log.e(TAG, "o-----------nItemClick: "+room_key );
+                    GetData.GetRootKey(id, context);
+//                    Log.e(TAG, "onClick: "+id );
+//                    Intent intent = new Intent(context, PlayerActivity.class);
+//                    intent.putExtra("key", room_key);
+//                    Log.e(TAG, "o-----------nItemClick: "+room_key );
+//                    context.startActivity(intent);
+                }
+
+            }
+        });
+
     }
 
     @Override
@@ -48,7 +80,9 @@ public class TypeRecyclerAdapter extends RecyclerView.Adapter<TypeRecyclerAdapte
         return data.size();
     }
 
-    class MyViewHoler extends RecyclerView.ViewHolder {
+    private static final String TAG = "TypeRecyclerAdapter";
+
+    class MyViewHoler extends RecyclerView.ViewHolder  {
         TextView topTitle;
         TextView bottomTitle;
         ImageView imageView;
@@ -59,5 +93,10 @@ public class TypeRecyclerAdapter extends RecyclerView.Adapter<TypeRecyclerAdapte
             imageView = (ImageView) itemView.findViewById(R.id.allitemimmage);
             bottomTitle = (TextView) itemView.findViewById(R.id.allitembigtitle);
         }
+
+
     }
+
+
+
 }
